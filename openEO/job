@@ -1,0 +1,440 @@
+{
+  "load_collection_HTHTT1789F": {
+    "process_id": "load_collection",
+    "arguments": {
+      "id": "SENTINEL2_L2A",
+      "spatial_extent": {
+        "west": 5.6,
+        "south": 50.2,
+        "east": 8.9,
+        "north": 52.5
+      },
+      "temporal_extent": [
+        "2021-04-01",
+        "2021-10-01"
+      ],
+      "bands": [
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "B06",
+        "B07",
+        "B08",
+        "B8A",
+        "B11",
+        "B12"
+      ]
+    }
+  },
+  "load_collection_FOITH1782W": {
+    "process_id": "load_collection",
+    "arguments": {
+      "id": "SENTINEL2_L2A_SENTINELHUB",
+      "spatial_extent": {
+        "west": 5.6,
+        "south": 50.2,
+        "east": 8.9,
+        "north": 52.5
+      },
+      "temporal_extent": [
+        "2021-04-01",
+        "2021-10-01"
+      ],
+      "bands": [
+        "SCL"
+      ]
+    }
+  },
+  "reduce_dimension_QZYHW2316E": {
+    "process_id": "reduce_dimension",
+    "arguments": {
+      "data": {
+        "from_node": "load_collection_FOITH1782W"
+      },
+      "reducer": {
+        "process_graph": {
+          "array_element_GGOEF5399W": {
+            "process_id": "array_element",
+            "arguments": {
+              "data": {
+                "from_parameter": "data"
+              },
+              "index": 0,
+              "return_nodata": false
+            }
+          },
+          "eq_SDFMD0694H": {
+            "process_id": "eq",
+            "arguments": {
+              "x": {
+                "from_node": "array_element_GGOEF5399W"
+              },
+              "y": 4,
+              "case_sensitive": true
+            }
+          },
+          "eq_NGTGA4781J": {
+            "process_id": "eq",
+            "arguments": {
+              "x": {
+                "from_node": "array_element_GGOEF5399W"
+              },
+              "y": 5,
+              "case_sensitive": true
+            }
+          },
+          "or_SBEST4524F": {
+            "process_id": "or",
+            "arguments": {
+              "x": {
+                "from_node": "eq_SDFMD0694H"
+              },
+              "y": {
+                "from_node": "eq_NGTGA4781J"
+              }
+            }
+          },
+          "eq_YWWUZ8884U": {
+            "process_id": "eq",
+            "arguments": {
+              "x": {
+                "from_node": "array_element_GGOEF5399W"
+              },
+              "y": 6,
+              "case_sensitive": true
+            }
+          },
+          "eq_MIMDI6364F": {
+            "process_id": "eq",
+            "arguments": {
+              "x": {
+                "from_node": "array_element_GGOEF5399W"
+              },
+              "y": 7,
+              "case_sensitive": true
+            }
+          },
+          "or_BKFWO3533V": {
+            "process_id": "or",
+            "arguments": {
+              "x": {
+                "from_node": "eq_YWWUZ8884U"
+              },
+              "y": {
+                "from_node": "eq_MIMDI6364F"
+              }
+            }
+          },
+          "eq_SRCVB1841Z": {
+            "process_id": "eq",
+            "arguments": {
+              "x": {
+                "from_node": "array_element_GGOEF5399W"
+              },
+              "y": 11,
+              "case_sensitive": true
+            }
+          },
+          "or_CGRDI9368C": {
+            "process_id": "or",
+            "arguments": {
+              "x": {
+                "from_node": "or_BKFWO3533V"
+              },
+              "y": {
+                "from_node": "eq_SRCVB1841Z"
+              }
+            }
+          },
+          "or_JJMAT5993N": {
+            "process_id": "or",
+            "arguments": {
+              "x": {
+                "from_node": "or_SBEST4524F"
+              },
+              "y": {
+                "from_node": "or_CGRDI9368C"
+              }
+            }
+          },
+          "not_VDSJR6827O": {
+            "process_id": "not",
+            "arguments": {
+              "x": {
+                "from_node": "or_JJMAT5993N"
+              }
+            },
+            "result": true
+          }
+        }
+      },
+      "dimension": "bands",
+      "context": null
+    }
+  },
+  "mask_PAMRX5773O": {
+    "process_id": "mask",
+    "arguments": {
+      "data": {
+        "from_node": "load_collection_HTHTT1789F"
+      },
+      "mask": {
+        "from_node": "reduce_dimension_QZYHW2316E"
+      }
+    }
+  },
+  "reduce_dimension_VNXTC8755N": {
+    "process_id": "reduce_dimension",
+    "arguments": {
+      "data": {
+        "from_node": "mask_PAMRX5773O"
+      },
+      "reducer": {
+        "process_graph": {
+          "median_FGDVI2391Z": {
+            "process_id": "median",
+            "arguments": {
+              "data": {
+                "from_parameter": "data"
+              },
+              "ignore_nodata": true
+            },
+            "result": true
+          }
+        }
+      },
+      "dimension": "t",
+      "context": null
+    }
+  },
+  "reduce_dimension_WFLTZ0160T": {
+    "process_id": "reduce_dimension",
+    "arguments": {
+      "data": {
+        "from_node": "reduce_dimension_VNXTC8755N"
+      },
+      "reducer": {
+        "process_graph": {
+          "array_element_FNQUS1033L": {
+            "process_id": "array_element",
+            "arguments": {
+              "data": {
+                "from_parameter": "data"
+              },
+              "index": 6,
+              "return_nodata": false
+            }
+          },
+          "array_element_GIGDW2925H": {
+            "process_id": "array_element",
+            "arguments": {
+              "data": {
+                "from_parameter": "data"
+              },
+              "index": 2,
+              "return_nodata": false
+            }
+          },
+          "normalized_difference_DKMLQ2674S": {
+            "process_id": "normalized_difference",
+            "arguments": {
+              "x": {
+                "from_node": "array_element_FNQUS1033L"
+              },
+              "y": {
+                "from_node": "array_element_GIGDW2925H"
+              }
+            },
+            "result": true
+          }
+        }
+      },
+      "dimension": "bands",
+      "context": null
+    }
+  },
+  "add_dimension_VDHNK3358R": {
+    "process_id": "add_dimension",
+    "arguments": {
+      "data": {
+        "from_node": "reduce_dimension_WFLTZ0160T"
+      },
+      "name": "bands",
+      "label": "NDVI",
+      "type": "bands"
+    }
+  },
+  "merge_cubes_CRAEU0608Q": {
+    "process_id": "merge_cubes",
+    "arguments": {
+      "cube1": {
+        "from_node": "reduce_dimension_VNXTC8755N"
+      },
+      "cube2": {
+        "from_node": "add_dimension_VDHNK3358R"
+      },
+      "context": null
+    }
+  },
+  "reduce_dimension_ZEZNM7214O": {
+    "process_id": "reduce_dimension",
+    "arguments": {
+      "data": {
+        "from_node": "reduce_dimension_VNXTC8755N"
+      },
+      "reducer": {
+        "process_graph": {
+          "array_element_TBXFG6480B": {
+            "process_id": "array_element",
+            "arguments": {
+              "data": {
+                "from_parameter": "data"
+              },
+              "index": 6,
+              "return_nodata": false
+            }
+          },
+          "array_element_HBYOX9446G": {
+            "process_id": "array_element",
+            "arguments": {
+              "data": {
+                "from_parameter": "data"
+              },
+              "index": 2,
+              "return_nodata": false
+            }
+          },
+          "subtract_MJKHX1086C": {
+            "process_id": "subtract",
+            "arguments": {
+              "x": {
+                "from_node": "array_element_TBXFG6480B"
+              },
+              "y": {
+                "from_node": "array_element_HBYOX9446G"
+              }
+            }
+          },
+          "multiply_WNVQU8630C": {
+            "process_id": "multiply",
+            "arguments": {
+              "x": 2.5,
+              "y": {
+                "from_node": "subtract_MJKHX1086C"
+              }
+            }
+          },
+          "multiply_HHQXU5633Z": {
+            "process_id": "multiply",
+            "arguments": {
+              "x": 6,
+              "y": {
+                "from_node": "array_element_HBYOX9446G"
+              }
+            }
+          },
+          "add_ZHASL3552N": {
+            "process_id": "add",
+            "arguments": {
+              "x": {
+                "from_node": "array_element_TBXFG6480B"
+              },
+              "y": {
+                "from_node": "multiply_HHQXU5633Z"
+              }
+            }
+          },
+          "array_element_CYXVF7624N": {
+            "process_id": "array_element",
+            "arguments": {
+              "data": {
+                "from_parameter": "data"
+              },
+              "index": 0,
+              "return_nodata": false
+            }
+          },
+          "multiply_KDOXB8654U": {
+            "process_id": "multiply",
+            "arguments": {
+              "x": 7.5,
+              "y": {
+                "from_node": "array_element_CYXVF7624N"
+              }
+            }
+          },
+          "subtract_STXLP9196K": {
+            "process_id": "subtract",
+            "arguments": {
+              "x": {
+                "from_node": "add_ZHASL3552N"
+              },
+              "y": {
+                "from_node": "multiply_KDOXB8654U"
+              }
+            }
+          },
+          "add_WLFDR8292O": {
+            "process_id": "add",
+            "arguments": {
+              "x": {
+                "from_node": "subtract_STXLP9196K"
+              },
+              "y": 1
+            }
+          },
+          "divide_VZLCL4030Z": {
+            "process_id": "divide",
+            "arguments": {
+              "x": {
+                "from_node": "multiply_WNVQU8630C"
+              },
+              "y": {
+                "from_node": "add_WLFDR8292O"
+              }
+            },
+            "result": true
+          }
+        }
+      },
+      "dimension": "bands",
+      "context": null
+    }
+  },
+  "add_dimension_VPYDK8438N": {
+    "process_id": "add_dimension",
+    "arguments": {
+      "data": {
+        "from_node": "reduce_dimension_ZEZNM7214O"
+      },
+      "name": "bands",
+      "label": "EVI",
+      "type": "bands"
+    }
+  },
+  "merge_cubes_ZTKTC9750N": {
+    "process_id": "merge_cubes",
+    "arguments": {
+      "cube1": {
+        "from_node": "merge_cubes_CRAEU0608Q"
+      },
+      "cube2": {
+        "from_node": "add_dimension_VPYDK8438N"
+      },
+      "context": null
+    }
+  },
+  "save_result_DDOEM2359D": {
+    "process_id": "save_result",
+    "arguments": {
+      "data": {
+        "from_node": "merge_cubes_ZTKTC9750N"
+      },
+      "format": "NetCDF",
+      "options": {}
+    },
+    "result": true
+  }
+} 
+
