@@ -4,6 +4,8 @@
 #' @param region sf, the area of interest
 #' @param t vector of length 2 with two date stings e.g. c("2021-04-01", "2021-10-01")
 #' 
+#' @author Jonathan Bahlmann, Marvin Ludwig
+#' 
 #' @details Before running this function, you have to estanblish a connection to openEO
 #'    by running \code{openeo::connect()}. Note: Currently just takes the bounding box of region.
 #'    
