@@ -37,13 +37,14 @@ test_data = ref %>% filter(set == "testing")
 
 train_data = train_data %>% filter(lcc2 != "sand")
 
-table(train_data$lcc2)
+
 
 
 train_sample = train_data %>% group_by(lcc2) %>% slice_sample(n = 2500)
+st_write(train_sample, "lcc_modelling/data/training_samples.gpkg")
 
-
-
+test_sample = test_data %>% group_by(lcc2) %>% slice_sample(n = 2500)
+st_write(test_sample, "lcc_modelling/data/test_samples.gpkg")
 
 
 
