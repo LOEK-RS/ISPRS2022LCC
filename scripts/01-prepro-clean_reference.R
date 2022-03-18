@@ -1,11 +1,8 @@
 # training data cleaning
 
-library(sf)
-library(dplyr)
-library(mapview)
-library(stringr)
+source("setup.R")
 
-mapview::mapviewOptions(fgb = FALSE) 
+
 
 samples = st_read("data/trainingsites_remotesensingcourse.gpkg")
 
@@ -41,12 +38,12 @@ samples$Kategorie_1[samples$Kategorie_1 == "Vegetation"] = "vegetation"
 
 
 samples$Kategorie_2[samples$Kategorie_2 == "Bebauung"] = "settlement"
-samples$Kategorie_2[samples$Kategorie_2 == "Fliessgewaesser"] = "river"
+samples$Kategorie_2[samples$Kategorie_2 == "Fliessgewaesser"] = "water"
 samples$Kategorie_2[samples$Kategorie_2 == "Gruenland"] = "grassland"
 samples$Kategorie_2[samples$Kategorie_2 == "Landwirtschaft"] = "agriculture"
-samples$Kategorie_2[samples$Kategorie_2 == "Salzwasser"] = "sea"
+samples$Kategorie_2[samples$Kategorie_2 == "Salzwasser"] = "water"
 samples$Kategorie_2[samples$Kategorie_2 == "Sand"] = "sand"
-samples$Kategorie_2[samples$Kategorie_2 == "See"] = "lake"
+samples$Kategorie_2[samples$Kategorie_2 == "See"] = "water"
 samples$Kategorie_2[samples$Kategorie_2 == "Verkehrswege"] = "roads"
 samples$Kategorie_2[samples$Kategorie_2 == "Wald "] = "forest"
 
@@ -56,12 +53,19 @@ samples = samples %>% rename(lcc1 = Kategorie_1,
                              region = Region)
 
 
+# remove heidelberg
+samples = samples %>% filter(region != "Heidelberg")
+
+
 samples$set = "training"
-samples$set[samples$region %in% c("Heidelberg", "Eiderstedt")] = "testing"
 
 
 
-st_write(samples, "data/reference_polygons.gpkg")
+samples$set[samples$region %in% c("Eiderstedt", "Aachen", "Detmold")] = "testing"
+
+
+
+st_write(samples, "data/reference_polygons.gpkg", append = FALSE)
 
 
 

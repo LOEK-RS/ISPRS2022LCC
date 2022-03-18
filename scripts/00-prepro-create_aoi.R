@@ -1,7 +1,6 @@
 # prepro create aois
 
-library(sf)
-library(tidyverse)
+source("setup.R")
 
 
 ref = st_read("data/reference_polygons.gpkg")
