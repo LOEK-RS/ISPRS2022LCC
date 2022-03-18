@@ -1,3 +1,5 @@
 .Rproj.user/
 /data
 writing/
+detmold_aoa.RDS
+detmold_prediction.RDS
